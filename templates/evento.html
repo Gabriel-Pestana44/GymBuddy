@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Criar Evento</title>
+</head>
+<body>
+
+    <h1>Criar Evento</h1>
+
+    <form method="POST">
+
+        <label>Nome do Evento</label>
+        <br>
+        <input name="nome">
+        <br><br>
+
+        <label>Cidade</label>
+        <br>
+        <input name="cidade">
+        <br><br>
+
+        <label>Estado</label>
+        <br>
+        <input name="estado">
+        <br><br>
+        
+        <label>Descrição</label>
+        <br>
+        <textarea
+            name="descricao"
+            rows="4"
+            cols="40">
+        </textarea>
+        <br><br>
+
+        <label>Data</label>
+        <br>
+        <input type="date" name="data">
+        <br><br>
+
+        <label>Horário</label>
+        <br>
+        <input type="time" name="horario">
+        <br><br>
+
+        <label>Local</label>
+        <br>
+        <input name="local">
+        <br><br>
+
+        
+
+        <label>Status</label>
+        <br>
+
+        <select name="status">
+            <option value="ABERTO">
+                Aberto
+            </option>
+
+            <option value="FECHADO">
+                Fechado
+            </option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">
+            Criar Evento
+        </button>
+
+    </form>
+
+</body>
+</html>

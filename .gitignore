@@ -1,0 +1,17 @@
+# Ambientes Virtuais (O mais importante!)
+.venv/
+venv/
+ENV/
+env/
+
+# Caches do Python
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Banco de dados local (Geralmente não subimos o arquivo .db para não sobrescrever dados de teste)
+database/gymbuddy.db
+
+# Configurações do VS Code (Opcional, se não quiser subir suas configs pessoais)
+.vscode/

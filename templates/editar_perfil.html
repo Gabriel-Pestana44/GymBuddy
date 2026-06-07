@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Editar Perfil</title>
+</head>
+
+<body>
+
+<h1>
+    Editar Perfil
+</h1>
+
+<form method="POST">
+
+    Nome:
+    <br>
+
+    <input
+        type="text"
+        name="nome"
+        value="{{ usuario['nome'] }}"
+        required
+    >
+
+    <br><br>
+
+    Email:
+    <br>
+
+    <input
+        type="email"
+        name="email"
+        value="{{ usuario['email'] }}"
+        required
+    >
+
+    <br><br>
+
+    Cidade:
+    <br>
+
+    <input
+        type="text"
+        name="cidade"
+        value="{{ usuario['cidade'] }}"
+        required
+    >
+
+    <br><br>
+
+    Estado:
+    <br>
+
+    <input
+        type="text"
+        name="estado"
+        value="{{ usuario['estado'] }}"
+        required
+    >
+
+    <br><br>
+
+    <br><br>
+
+    Senha Atual:
+    <br>
+
+    <input
+        type="password"
+        name="senha_atual"
+        required
+    >
+
+    <br><br>
+
+    Nova Senha:
+    <br>
+
+    <input
+        type="password"
+        name="nova_senha"
+    >
+
+    <br>
+
+    <small>
+        Deixe em branco para manter a senha atual.
+    </small>
+
+    <br><br>
+
+    <button type="submit">
+        Salvar Alterações
+    </button>
+
+</form>
+
+<br>
+
+<a href="/home">
+
+    <button>
+
+        Cancelar
+
+    </button>
+
+</a>
+
+</body>
+</html>

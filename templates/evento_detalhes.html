@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ evento["nome"] }}</title>
+</head>
+<body>
+
+    <h1>{{ evento["nome"] }}</h1>
+
+    <hr>
+
+    <h3>Descrição</h3>
+
+    <p>
+        {{ evento["descricao"] }}
+    </p>
+
+    <hr>
+
+    <p>
+        <strong>Data:</strong>
+        {{ evento["data"] }}
+    </p>
+
+    <p>
+        <strong>Horário:</strong>
+        {{ evento["horario"] }}
+    </p>
+
+    <p>
+        <strong>Local:</strong>
+        {{ evento["local"] }}
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+        {{ evento["status"] }}
+    </p>
+
+    <p>
+        <strong>Criador:</strong>
+        {{ evento["criador_nome"] }}
+    </p>
+
+    <hr>
+
+    <a
+    href="https://www.google.com/maps/search/{{ evento['local'] }}"
+    target="_blank"
+    >
+    Ver no Maps
+    </a>
+
+    <hr>
+    
+    <h3>Participantes</h3>
+
+    <p>
+    Total: {{ total_participantes }}
+    </p>
+
+    <p>
+        Confirmados: {{ confirmados }}
+    </p>
+
+    <p>
+        Pendentes: {{ pendentes }}
+    </p>
+
+    <p>
+        Negados: {{ negados }}
+    </p>
+
+{% if participantes %}
+
+    <ul>
+
+    {% for participante in participantes %}
+
+        <li>
+
+            {{ participante["nome"] }}
+
+            -
+
+            Convite:
+            {{ participante["status_convite"] }}
+
+            -
+
+            Presença:
+            {{ participante["status_presenca"] }}
+
+            {% if eh_admin %}
+
+                <a href="/expulsar/{{ evento['id'] }}/{{ participante['id'] }}">
+
+                    <button>
+
+                        Expulsar
+
+                    </button>
+
+                </a>
+
+            {% endif %}
+
+        </li>
+
+    {% endfor %}
+
+    </ul>
+
+{% else %}
+
+    <p>
+        Nenhum participante ainda.
+    </p>
+
+{% endif %}
+
+<hr>
+
+{% if meu_registro %}
+
+    <h3>Minha Presença</h3>
+
+    <p>
+
+        Convite:
+
+        {{ meu_registro["status_convite"] }}
+
+    </p>
+
+    <p>
+
+        Status atual:
+
+        {{ meu_registro["status_presenca"] }}
+
+    </p>
+
+    {% if meu_registro["status_convite"] == "ACEITO" %}
+
+        <a href="/confirmar-presenca/{{ evento['id'] }}">
+
+            <button>
+
+                Confirmar Presença
+
+            </button>
+
+        </a>
+
+        <a href="/negar-presenca/{{ evento['id'] }}">
+
+            <button>
+
+                Não Vou
+
+            </button>
+
+        </a>
+
+    {% else %}
+
+        <p>
+
+            Aguarde a aprovação do administrador.
+
+        </p>
+
+    {% endif %}
+
+{% else %}
+
+    <a href="/participar/{{ evento['id'] }}">
+        <button>
+            Participar
+        </button>
+    </a>
+
+{% endif %}
+
+<hr>
+
+    <br><br>
+
+    {% if eh_admin %}
+
+<hr>
+
+<a href="/convidar/{{ evento['id'] }}">
+    <button>
+        Convidar Usuário
+    </button>
+</a>
+
+<h3>
+    Solicitações Pendentes
+</h3>
+
+{% for solicitacao in solicitacoes %}
+
+<p>
+
+    {{ solicitacao["nome"] }}
+
+    <a href="/aprovar/{{ solicitacao['id'] }}">
+        <button>
+            Aceitar
+        </button>
+    </a>
+
+    <a href="/recusar/{{ solicitacao['id'] }}">
+        <button>
+            Recusar
+        </button>
+    </a>
+
+</p>
+
+{% endfor %}
+
+{% endif %}
+
+{% if eh_admin %}
+
+    <hr>
+
+    <a href="/editar-evento/{{ evento['id'] }}">
+        <button>
+            Editar Evento
+        </button>
+    </a>
+
+    <a href="/deletar-evento/{{ evento['id'] }}">
+    <button>
+        Deletar Evento
+    </button>
+    </a>
+
+{% endif %}
+
+    <a href="/home">
+        <button>
+            Voltar
+        </button>
+    </a>
+
+</body>
+</html>

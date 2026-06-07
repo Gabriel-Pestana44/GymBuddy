@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Editar Evento</title>
+</head>
+
+<body>
+
+<h1>Editar Evento</h1>
+
+<form method="POST">
+
+    Nome:<br>
+    <input
+        type="text"
+        name="nome"
+        value="{{ evento['nome'] }}"
+    >
+    <br><br>
+
+    Descrição:<br>
+    <textarea name="descricao">{{ evento['descricao'] }}</textarea>
+    <br><br>
+
+    Cidade:<br>
+    <input
+        type="text"
+        name="cidade"
+        value="{{ evento['cidade'] }}"
+    >
+    <br><br>
+
+    Estado:<br>
+    <input
+        type="text"
+        name="estado"
+        value="{{ evento['estado'] }}"
+    >
+    <br><br>
+
+    Data:<br>
+    <input
+        type="date"
+        name="data"
+        value="{{ evento['data'] }}"
+    >
+    <br><br>
+
+    Horário:<br>
+    <input
+        type="time"
+        name="horario"
+        value="{{ evento['horario'] }}"
+    >
+    <br><br>
+
+    Local:<br>
+    <input
+        type="text"
+        name="local"
+        value="{{ evento['local'] }}"
+    >
+    <br><br>
+
+    Status:<br>
+
+    <select name="status">
+
+        <option
+            value="ABERTO"
+            {% if evento['status'] == 'ABERTO' %}
+            selected
+            {% endif %}
+        >
+            ABERTO
+        </option>
+
+        <option
+            value="FECHADO"
+            {% if evento['status'] == 'FECHADO' %}
+            selected
+            {% endif %}
+        >
+            FECHADO
+        </option>
+
+    </select>
+
+    <br><br>
+
+    <button type="submit">
+        Salvar Alterações
+    </button>
+
+</form>
+
+</body>
+</html>
