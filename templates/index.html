@@ -1,25 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>GymBuddy</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <h1>GymBuddy</h1>
+{% block title %}GymBuddy - Bem-vindo{% endblock %}
 
-    <h3>Organize atividades físicas com seus amigos</h3>
-
-    <br>
-
-    <a href="/login">
-        <button>Entrar</button>
-    </a>
-
-    <br><br>
-
-    <a href="/cadastro">
-        <button>Criar Conta</button>
-    </a>
-
-</body>
-</html>
+{% block content %}
+<div class="text-center py-12 sm:py-20 px-4 max-w-2xl mx-auto space-y-6">
+    <h1 class="text-4xl sm:text-6xl font-black text-indigo-600 tracking-tight leading-none">GymBuddy 🎯</h1>
+    <p class="text-lg sm:text-xl text-gray-500 font-medium max-w-lg mx-auto leading-relaxed">Organize atividades físicas, marque treinos e peladas, e movimente-se com seus amigos em um só lugar.</p>
+    
+    <div class="flex flex-col sm:flex-row justify-center items-center gap-3 pt-4">
+        <a href="/login" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-black px-8 py-4 rounded-xl shadow-md shadow-indigo-100 transition-all text-center text-base">
+            Entrar na Conta
+        </a>
+        <a href="/cadastro" class="w-full sm:w-auto bg-white border border-gray-200 hover:bg-gray-50 active:scale-[0.98] text-gray-700 font-black px-8 py-4 rounded-xl shadow-sm transition-all text-center text-base">
+            Criar Nova Conta
+        </a>
+    </div>
+</div>
+{% endblock %}

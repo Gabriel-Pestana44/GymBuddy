@@ -1,47 +1,26 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
 
-<head>
-    <title>Convidar Usuário</title>
-</head>
+{% block title %}Convidar Atleta - GymBuddy{% endblock %}
 
-<body>
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100/80">
+    <h2 class="text-2xl font-black text-gray-900 mb-1 tracking-tight">Convidar Usuário</h2>
+    <p class="text-sm text-gray-400 mb-6">Insira o e-mail exato do atleta cadastrado para adicioná-lo à lista.</p>
 
-<h1>Convidar Usuário</h1>
+    <form method="POST" class="space-y-5">
+        <div>
+            <label class="block text-sm font-bold text-gray-700 mb-1.5">E-mail do Usuário</label>
+            <input type="email" name="email" required placeholder="exemplo@email.com" class="w-full px-4 py-3 border border-gray-200 bg-gray-50/50 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-base">
+        </div>
 
-<form method="POST">
-
-    Email do usuário:
-
-    <br><br>
-
-    <input
-        type="email"
-        name="email"
-        required
-    >
-
-    <br><br>
-
-    <button type="submit">
-
-        Convidar
-
-    </button>
-
-</form>
-
-<br>
-
-<a href="/evento/{{ evento_id }}">
-
-    <button>
-
-        Voltar
-
-    </button>
-
-</a>
-
-</body>
-</html>
+        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+            <button type="submit" class="w-full sm:flex-grow bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3.5 rounded-xl transition-all shadow-md shadow-indigo-100 text-baseOrder order-1 sm:order-2">
+                Convidar Atleta
+            </button>
+            <a href="/evento/{{ evento_id }}" class="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 active:scale-[0.99] text-gray-600 font-bold px-6 py-3.5 rounded-xl text-base transition-all text-center flex items-center justify-center order-2 sm:order-1">
+                Voltar
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

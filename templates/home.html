@@ -1,186 +1,102 @@
-<h1>Bem-vindo, {{ nome }}</h1>
+{% extends 'base.html' %}
 
-<form method="GET" action="/home">
+{% block title %}Início - GymBuddy{% endblock %}
 
-    <input
-        type="text"
-        name="busca"
-        placeholder="Buscar evento..."
-        value="{{ busca }}"
-    >
+{% block content %}
+<div class="space-y-6">
+    
+    <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">Bem-vindo, {{ nome }}! 👋</h1>
+            <p class="text-sm text-gray-400 font-medium">Pronto para a atividade física de hoje?</p>
+        </div>
+        <a href="/criar-evento" class="bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-bold px-5 py-3 rounded-xl text-sm transition-all shadow-md shadow-emerald-100 text-center">
+            + Criar Evento
+        </a>
+    </div>
 
-    <button type="submit">
-        Buscar
-    </button>
+    <form method="GET" action="/home" class="flex gap-2">
+        <input type="text" name="busca" placeholder="Buscar evento por nome, cidade..." value="{{ busca }}" class="flex-grow px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-base bg-white shadow-sm">
+        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white px-5 sm:px-6 font-bold rounded-xl transition-all shadow-md shadow-indigo-100 text-base">Buscar</button>
+    </form>
 
-</form>
-
-<hr>
-
-<a href="/editar-perfil">
-    <button>
-        Editar Perfil
-    </button>
-</a>
-
-<a href="/criar-evento">
-    <button>Criar Evento</button>
-</a>
-
-<hr>
-
-{% if busca %}
-
-    <h2>
-        Resultados para "{{ busca }}"
-    </h2>
-
-    {% if resultados %}
-
-        <ul>
-
-        {% for evento in resultados %}
-
-            <li>
-
-                <strong>
-                    {{ evento["nome"] }}
-                </strong>
-
-                -
-
-                {{ evento["cidade"] }}
-
-                /
-
-                {{ evento["estado"] }}
-
-                <a href="/evento/{{ evento['id'] }}">
-                    Ver Evento
-                </a>
-
-            </li>
-
-        {% endfor %}
-
-        </ul>
-
-    {% else %}
-
-        <p>
-            Nenhum evento encontrado.
-        </p>
-
+    {% if busca %}
+    <section class="bg-indigo-50/40 p-5 rounded-2xl border border-indigo-100">
+        <h2 class="text-base font-bold text-indigo-950 mb-3 tracking-tight">Resultados para "{{ busca }}"</h2>
+        {% if resultados %}
+            <div class="grid gap-3 sm:grid-cols-2">
+                {% for evento in resultados %}
+                <div class="bg-white p-4 rounded-xl border border-indigo-100 flex justify-between items-center shadow-sm">
+                    <div class="min-w-0 pr-2">
+                        <h3 class="font-bold text-gray-900 text-sm truncate">{{ evento["nome"] }}</h3>
+                        <p class="text-xs text-gray-400 font-medium truncate">{{ evento["cidade"] }} / {{ evento["estado"] }}</p>
+                    </div>
+                    <a href="/evento/{{ evento['id'] }}" class="text-indigo-600 hover:text-indigo-800 text-xs font-bold whitespace-nowrap shrink-0">Ver Evento →</a>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-500 text-xs italic">Nenhum evento encontrado.</p>
+        {% endif %}
+    </section>
     {% endif %}
 
-    <hr>
-
-{% endif %}
-
-<h2>
-    Eventos Próximos
-</h2>
-
-{% if eventos_proximos %}
-
-    <ul>
-
-    {% for evento in eventos_proximos %}
-
-        <li>
-
-            <strong>
-                {{ evento["nome"] }}
-            </strong>
-
-            -
-
-            {{ evento["cidade"] }}
-
-            <a href="/evento/{{ evento['id'] }}">
-                Ver Evento
-            </a>
-
-        </li>
-
-    {% endfor %}
-
-    </ul>
-
-{% else %}
-
-    <p>
-        Nenhum evento próximo.
-    </p>
-
-{% endif %}
-
-<hr>
-
-<h2>
-    Meus Eventos
-</h2>
-
-{% if meus_eventos %}
-
-    <ul>
-
-    {% for evento in meus_eventos %}
-
-        <li>
-
-            <strong>
-                {{ evento["nome"] }}
-            </strong>
-
-            -
-
-            {{ evento["cidade"] }}
-
-            <a href="/evento/{{ evento['id'] }}">
-                Ver Evento
-            </a>
-
-        </li>
-
-    {% endfor %}
-
-    </ul>
-
-{% else %}
-
-    <p>
-        Você ainda não participa de nenhum evento.
-    </p>
-
-{% endif %}
-
-<h2>
-    Eventos Criados
-</h2>
-
-{% if eventos_criados %}
-
-    {% for evento in eventos_criados %}
-
-        <p>
-
-            {{ evento["nome"] }}
-
-            <a href="/evento/{{ evento['id'] }}">
-                Ver Evento
-            </a>
-
-        </p>
-
-    {% endfor %}
-
-{% else %}
+    <div class="grid md:grid-cols-2 gap-6">
         
-    <p>
-        Você ainda não possui eventos criados.
-    </p>
+        <section class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
+            <h2 class="text-base sm:text-lg font-black text-gray-900 mb-4 flex items-center gap-2 tracking-tight">📍 Eventos Próximos</h2>
+            {% if eventos_proximos %}
+                <div class="space-y-2.5 flex-grow">
+                    {% for evento in eventos_proximos %}
+                    <div class="p-3 bg-gray-50/60 rounded-xl flex justify-between items-center hover:bg-gray-100/70 transition border border-gray-100">
+                        <div class="min-w-0 pr-2">
+                            <h4 class="font-bold text-sm text-gray-800 truncate">{{ evento["nome"] }}</h4>
+                            <p class="text-xs text-gray-400 font-medium truncate">{{ evento["cidade"] }}</p>
+                        </div>
+                        <a href="/evento/{{ evento['id'] }}" class="bg-white text-indigo-600 border border-gray-200 px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm hover:border-indigo-200 transition shrink-0">Ver</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-400 text-xs italic py-4">Nenhum evento próximo no momento.</p>
+            {% endif %}
+        </section>
 
-{% endif %}
+        <section class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
+            <h2 class="text-base sm:text-lg font-black text-gray-900 mb-4 flex items-center gap-2 tracking-tight">💪 Eventos que Vou</h2>
+            {% if meus_eventos %}
+                <div class="space-y-2.5 flex-grow">
+                    {% for evento in meus_eventos %}
+                    <div class="p-3 bg-gray-50/60 rounded-xl flex justify-between items-center hover:bg-gray-100/70 transition border border-gray-100">
+                        <div class="min-w-0 pr-2">
+                            <h4 class="font-bold text-sm text-gray-800 truncate">{{ evento["nome"] }}</h4>
+                            <p class="text-xs text-gray-400 font-medium truncate">{{ evento["cidade"] }}</p>
+                        </div>
+                        <a href="/evento/{{ evento['id'] }}" class="bg-white text-indigo-600 border border-gray-200 px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm hover:border-indigo-200 transition shrink-0">Ver</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-400 text-xs italic py-4">Você ainda não se inscreveu em nada.</p>
+            {% endif %}
+        </section>
+    </div>
 
-<a href="/logout"><button>Sair</button></a>
+    <section class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-gray-100">
+        <h2 class="text-base sm:text-lg font-black text-gray-900 mb-4 tracking-tight">👑 Gerenciando (Criados por Você)</h2>
+        {% if eventos_criados %}
+            <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+                {% for evento in eventos_criados %}
+                <div class="p-4 bg-gray-50/50 rounded-xl border border-gray-100 flex flex-col justify-between shadow-sm">
+                    <h3 class="font-bold text-sm text-gray-800 mb-3 truncate">{{ evento["nome"] }}</h3>
+                    <a href="/evento/{{ evento['id'] }}" class="text-center bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-2 rounded-lg text-xs transition border border-indigo-100/40">Painel de Controle</a>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-400 text-xs italic">Você ainda não organizou nenhum evento.</p>
+        {% endif %}
+    </section>
+
+</div>
+{% endblock %}

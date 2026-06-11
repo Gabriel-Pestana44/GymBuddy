@@ -1,253 +1,166 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ evento["nome"] }}</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <h1>{{ evento["nome"] }}</h1>
+{% block title %}Detalhes - {{ evento["nome"] }}{% endblock %}
 
-    <hr>
+{% block content %}
+<div class="space-y-6">
 
-    <h3>Descrição</h3>
-
-    <p>
-        {{ evento["descricao"] }}
-    </p>
-
-    <hr>
-
-    <p>
-        <strong>Data:</strong>
-        {{ evento["data"] }}
-    </p>
-
-    <p>
-        <strong>Horário:</strong>
-        {{ evento["horario"] }}
-    </p>
-
-    <p>
-        <strong>Local:</strong>
-        {{ evento["local"] }}
-    </p>
-
-    <p>
-        <strong>Status:</strong>
-        {{ evento["status"] }}
-    </p>
-
-    <p>
-        <strong>Criador:</strong>
-        {{ evento["criador_nome"] }}
-    </p>
-
-    <hr>
-
-    <a
-    href="https://www.google.com/maps/search/{{ evento['local'] }}"
-    target="_blank"
-    >
-    Ver no Maps
-    </a>
-
-    <hr>
-    
-    <h3>Participantes</h3>
-
-    <p>
-    Total: {{ total_participantes }}
-    </p>
-
-    <p>
-        Confirmados: {{ confirmados }}
-    </p>
-
-    <p>
-        Pendentes: {{ pendentes }}
-    </p>
-
-    <p>
-        Negados: {{ negados }}
-    </p>
-
-{% if participantes %}
-
-    <ul>
-
-    {% for participante in participantes %}
-
-        <li>
-
-            {{ participante["nome"] }}
-
-            -
-
-            Convite:
-            {{ participante["status_convite"] }}
-
-            -
-
-            Presença:
-            {{ participante["status_presenca"] }}
-
-            {% if eh_admin %}
-
-                <a href="/expulsar/{{ evento['id'] }}/{{ participante['id'] }}">
-
-                    <button>
-
-                        Expulsar
-
-                    </button>
-
+    <div class="bg-white p-5 sm:p-8 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-2 bg-indigo-600"></div>
+        
+        <div class="flex flex-col md:flex-row justify-between items-start gap-6 mb-6">
+            <div class="space-y-2 flex-grow w-full">
+                <span class="inline-flex items-center px-3 py-1 text-xs font-bold rounded-full {% if evento['status'] == 'ABERTO' %}bg-green-100 text-green-800{% else %}bg-amber-100 text-amber-800{% endif %}">
+                    🎯 {{ evento["status"] }}
+                </span>
+                <h1 class="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight leading-tight">{{ evento["nome"] }}</h1>
+                <p class="text-xs sm:text-sm text-gray-500">Organizado por: <span class="font-bold text-gray-700">{{ evento["criador_nome"] }}</span></p>
+            </div>
+            
+            <div class="w-full md:w-80 flex flex-col shrink-0">
+                <h3 class="text-sm font-bold text-gray-900 mb-2 flex items-center gap-1">
+                    📍 Localização
+                </h3>
+                <div class="rounded-xl overflow-hidden border border-gray-200 shadow-inner h-40 w-full relative bg-gray-100">
+                    <iframe
+                        width="100%"
+                        height="100%"
+                        style="border:0"
+                        loading="lazy"
+                        allowfullscreen
+                        src="https://maps.google.com/maps?q={{ evento['local'] | urlencode }}&t=&z=15&ie=UTF8&iwloc=&output=embed">
+                    </iframe>
+                </div>
+                <a href="https://www.google.com/maps/search/{{ evento['local'] | urlencode }}"
+                   target="_blank"
+                   class="mt-2 text-center bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-4 py-2 rounded-xl text-xs font-bold transition-all border border-indigo-100/50">
+                    Abrir no Google Maps ↗
                 </a>
+            </div>
+        </div>
 
-            {% endif %}
+        <div class="bg-gray-50/80 p-4 rounded-xl border border-gray-100 my-4">
+            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Descrição do Treino</h4>
+            <p class="text-gray-700 text-sm whitespace-pre-wrap leading-relaxed">{{ evento["descricao"] }}</p>
+        </div>
 
-        </li>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-sm">
+            <div class="bg-gray-50/50 p-3 rounded-xl border border-gray-100/60">
+                <span class="block text-gray-400 font-bold text-xs uppercase mb-0.5">Data</span>
+                <span class="font-bold text-gray-800">{{ evento["data"] }}</span>
+            </div>
+            <div class="bg-gray-50/50 p-3 rounded-xl border border-gray-100/60">
+                <span class="block text-gray-400 font-bold text-xs uppercase mb-0.5">Horário</span>
+                <span class="font-bold text-gray-800">{{ evento["horario"] }}</span>
+            </div>
+            <div class="bg-gray-50/50 p-3 rounded-xl border border-gray-100/60 sm:col-span-1">
+                <span class="block text-gray-400 font-bold text-xs uppercase mb-0.5">Endereço</span>
+                <span class="font-bold text-gray-800 truncate block" title="{{ evento['local'] }}">{{ evento["local"] }}</span>
+            </div>
+        </div>
+    </div>
 
-    {% endfor %}
+    <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-gray-100">
+        <h3 class="text-base sm:text-lg font-black text-gray-900 mb-3 tracking-tight">Sua Inscrição</h3>
+        
+        {% if meu_registro %}
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-gray-50/80 p-4 rounded-xl border border-gray-100">
+                <div class="text-sm space-y-1">
+                    <p class="font-medium text-gray-600">Convite: <span class="font-bold text-indigo-600">{{ meu_registro["status_convite"] }}</span></p>
+                    <p class="font-medium text-gray-600">Sua Presença: <span class="font-bold text-gray-800">{{ meu_registro["status_presenca"] }}</span></p>
+                </div>
 
-    </ul>
-
-{% else %}
-
-    <p>
-        Nenhum participante ainda.
-    </p>
-
-{% endif %}
-
-<hr>
-
-{% if meu_registro %}
-
-    <h3>Minha Presença</h3>
-
-    <p>
-
-        Convite:
-
-        {{ meu_registro["status_convite"] }}
-
-    </p>
-
-    <p>
-
-        Status atual:
-
-        {{ meu_registro["status_presenca"] }}
-
-    </p>
-
-    {% if meu_registro["status_convite"] == "ACEITO" %}
-
-        <a href="/confirmar-presenca/{{ evento['id'] }}">
-
-            <button>
-
-                Confirmar Presença
-
-            </button>
-
-        </a>
-
-        <a href="/negar-presenca/{{ evento['id'] }}">
-
-            <button>
-
-                Não Vou
-
-            </button>
-
-        </a>
-
-    {% else %}
-
-        <p>
-
-            Aguarde a aprovação do administrador.
-
-        </p>
-
-    {% endif %}
-
-{% else %}
-
-    <a href="/participar/{{ evento['id'] }}">
-        <button>
-            Participar
-        </button>
-    </a>
-
-{% endif %}
-
-<hr>
-
-    <br><br>
+                {% if meu_registro["status_convite"] == "ACEITO" %}
+                    <div class="flex gap-2 w-full sm:w-auto">
+                        <a href="/confirmar-presenca/{{ evento['id'] }}" class="flex-grow sm:flex-none text-center bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition shadow-sm">
+                            Confirmar Presença
+                        </a>
+                        <a href="/negar-presenca/{{ evento['id'] }}" class="flex-grow sm:flex-none text-center bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition">
+                            Não Vou
+                        </a>
+                    </div>
+                {% else %}
+                    <span class="w-full text-center sm:w-auto text-xs bg-amber-50 text-amber-700 font-bold px-3 py-2.5 rounded-xl border border-amber-200">
+                        ⏳ Aguarde aprovação do organizador.
+                    </span>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="text-center py-1">
+                <a href="/participar/{{ evento['id'] }}" class="block sm:inline-block bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold px-8 py-3.5 rounded-xl transition shadow-md text-base">
+                    Entrar no Evento 👋
+                </a>
+            </div>
+        {% endif %}
+    </div>
 
     {% if eh_admin %}
+    <div class="bg-indigo-50/40 p-5 sm:p-6 rounded-2xl border border-indigo-100 space-y-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-indigo-100 pb-3">
+            <h3 class="text-base sm:text-lg font-black text-indigo-950 tracking-tight">👑 Painel de Controle (Admin)</h3>
+            <div class="flex flex-wrap gap-1.5 w-full sm:w-auto">
+                <a href="/convidar/{{ evento['id'] }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-lg text-xs font-bold transition">Convidar</a>
+                <a href="/editar-evento/{{ evento['id'] }}" class="bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 px-3 py-2 rounded-lg text-xs font-bold transition">Editar</a>
+                <a href="/deletar-evento/{{ evento['id'] }}" onclick="return confirm('Excluir este evento permanentemente?')" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-2 rounded-lg text-xs font-bold transition">Deletar</a>
+            </div>
+        </div>
 
-<hr>
+        <div>
+            <h4 class="text-xs font-bold text-indigo-900 mb-2 uppercase tracking-wider">Solicitações de Entrada</h4>
+            {% if solicitacoes %}
+                <div class="space-y-2">
+                    {% for solicitacao in solicitacoes %}
+                    <div class="bg-white p-3 rounded-xl border border-indigo-50 flex justify-between items-center text-sm shadow-sm">
+                        <span class="font-bold text-gray-800">{{ solicitacao["nome"] }}</span>
+                        <div class="flex gap-1.5">
+                            <a href="/aprovar/{{ solicitacao['id'] }}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition">Aceitar</a>
+                            <a href="/recusar/{{ solicitacao['id'] }}" class="bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-bold transition">Recusar</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-xs text-indigo-400 italic">Nenhuma solicitação pendente.</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
 
-<a href="/convidar/{{ evento['id'] }}">
-    <button>
-        Convidar Usuário
-    </button>
-</a>
+    <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-gray-100">
+        <div class="border-b border-gray-100 pb-3 mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <h3 class="text-base sm:text-lg font-black text-gray-900 tracking-tight">👥 Lista de Participantes</h3>
+            <div class="flex flex-wrap gap-2 text-xs font-bold text-gray-400">
+                <span class="bg-gray-50 px-2 py-0.5 rounded-md border border-gray-100">Total: <b class="text-gray-700">{{ total_participantes }}</b></span>
+                <span class="bg-green-50 text-emerald-700 px-2 py-0.5 rounded-md border border-green-100/50">Confirmados: <b>{{ confirmados }}</b></span>
+                <span class="bg-amber-50 text-amber-600 px-2 py-0.5 rounded-md border border-amber-100/50">Pendentes: <b>{{ pendentes }}</b></span>
+            </div>
+        </div>
 
-<h3>
-    Solicitações Pendentes
-</h3>
+        {% if participantes %}
+            <ul class="divide-y divide-gray-50">
+            {% for participante in participantes %}
+                <li class="py-3 flex justify-between items-center text-sm gap-4">
+                    <div class="min-w-0">
+                        <span class="font-bold text-gray-900 block truncate">{{ participante["nome"] }}</span>
+                        <span class="text-xs text-gray-400 font-medium">Convite: {{ participante["status_convite"] }} | Presença: {{ participante["status_presenca"] }}</span>
+                    </div>
 
-{% for solicitacao in solicitacoes %}
+                    {% if eh_admin %}
+                        <a href="/expulsar/{{ evento['id'] }}/{{ participante['id'] }}" onclick="return confirm('Remover este participante do evento?')" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold px-2.5 py-1.5 rounded-lg text-xs transition whitespace-nowrap">
+                            Remover
+                        </a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-400 text-sm italic py-2">Nenhum atleta se inscreveu ainda.</p>
+        {% endif %}
+    </div>
 
-<p>
+    <div class="text-center pt-2">
+        <a href="/home" class="text-sm text-gray-400 hover:text-gray-600 font-bold transition">← Voltar para a Home</a>
+    </div>
 
-    {{ solicitacao["nome"] }}
-
-    <a href="/aprovar/{{ solicitacao['id'] }}">
-        <button>
-            Aceitar
-        </button>
-    </a>
-
-    <a href="/recusar/{{ solicitacao['id'] }}">
-        <button>
-            Recusar
-        </button>
-    </a>
-
-</p>
-
-{% endfor %}
-
-{% endif %}
-
-{% if eh_admin %}
-
-    <hr>
-
-    <a href="/editar-evento/{{ evento['id'] }}">
-        <button>
-            Editar Evento
-        </button>
-    </a>
-
-    <a href="/deletar-evento/{{ evento['id'] }}">
-    <button>
-        Deletar Evento
-    </button>
-    </a>
-
-{% endif %}
-
-    <a href="/home">
-        <button>
-            Voltar
-        </button>
-    </a>
-
-</body>
-</html>
+</div>
+{% endblock %}

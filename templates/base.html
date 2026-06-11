@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GymBuddy{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen antialiased">
+
+    <nav class="bg-indigo-600 text-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-3.5 flex justify-between items-center">
+            <a href="/" class="text-xl sm:text-2xl font-black tracking-tight flex items-center gap-2 active:scale-95 transition-transform">
+                GymBuddy 🎯
+            </a>
+            <div class="space-x-2 sm:space-x-4 flex items-center">
+                {% if session.get('usuario_id') %}
+                    <span class="text-indigo-200 text-xs sm:text-sm hidden md:inline">Olá, {{ session.get('usuario_nome') }}</span>
+                    <a href="/home" class="hover:text-indigo-100 transition text-sm font-semibold px-2 py-1 rounded-lg">Início</a>
+                    <a href="/editar-perfil" class="hover:text-indigo-100 transition text-sm font-semibold px-2 py-1 rounded-lg">Perfil</a>
+                    <a href="/logout" class="bg-indigo-700 hover:bg-indigo-800 active:scale-95 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold transition shadow-sm">Sair</a>
+                {% else %}
+                    <a href="/login" class="hover:text-indigo-100 transition text-sm font-semibold px-3 py-1">Entrar</a>
+                    <a href="/cadastro" class="bg-white text-indigo-600 hover:bg-indigo-50 active:scale-95 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold transition shadow-sm">Criar Conta</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="max-w-4xl w-full mx-auto px-4 mt-4 space-y-2">
+            {% for categoria, message in messages %}
+                <div class="p-4 rounded-2xl text-sm font-bold shadow-sm border transform translate-y-0 transition-all duration-300
+                {% if categoria == 'sucesso' %} bg-green-50 text-green-800 border-green-100
+                {% elif categoria == 'erro' %} bg-rose-50 text-rose-800 border-rose-100
+                {% else %} bg-blue-50 text-blue-800 border-blue-100 {% endif %}">
+                {{ message }}
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <main class="flex-grow max-w-4xl w-full mx-auto p-4 sm:p-6 my-4 sm:my-6">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-white border-t border-gray-100 text-center py-5 text-xs sm:text-sm text-gray-400 font-semibold mt-auto shadow-inner">
+        © 2026 GymBuddy. Bora se mexer! 💪
+    </footer>
+
+</body>
+</html>
